@@ -40,6 +40,38 @@ struct Produto {
     float preco;
 };
 
+struct Produto racoes[] = {
+    {"Rações", "Ração Premium para Cães", 129.90},
+    {"Rações", "Ração para Gatos Adultos", 99.50},
+    {"Rações", "Ração Filhotes Raças Pequenas", 84.30},
+    {"Rações", "Ração Light para Cães Obesos", 115.00}
+};
+int totalRacoes = sizeof(racoes) / sizeof(racoes[0]);
+
+struct Produto brinquedos[] = {
+    {"Brinquedos", "Bola de Borracha", 25.90},
+    {"Brinquedos", "Corda Trançada", 22.50},
+    {"Brinquedos", "Pelúcia Mordedor", 39.00},
+    {"Brinquedos", "Frisbee Pet", 34.90}
+};
+int totalBrinquedos = sizeof(brinquedos) / sizeof(brinquedos[0]);
+
+struct Produto higiene[] = {
+    {"Higiene", "Shampoo Neutro 500ml", 35.00},
+    {"Higiene", "Tapete Higiênico (30 unidades)", 89.00},
+    {"Higiene", "Escova Dental Pet", 19.90},
+    {"Higiene", "Perfume Pet 120ml", 44.90}
+};
+int totalHigiene = sizeof(higiene) / sizeof(higiene[0]);
+
+struct Produto acessorios[] = {
+    {"Acessórios", "Coleira Ajustável", 39.50},
+    {"Acessórios", "Peitoral Confort", 79.90},
+    {"Acessórios", "Caminha Acolchoada", 120.00},
+    {"Acessórios", "Comedouro Inox", 59.90}
+};
+int totalAcessorios = sizeof(acessorios) / sizeof(acessorios[0]);
+
 int main(){
 
     setlocale(LC_ALL, "Portuguese");
