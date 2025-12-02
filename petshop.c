@@ -72,6 +72,21 @@ struct Produto acessorios[] = {
 };
 int totalAcessorios = sizeof(acessorios) / sizeof(acessorios[0]);
 
+struct Servico {
+    char nome[50];
+    float preco;
+};
+
+// tipo dos serviços e valores //
+struct Servico servicos[] = {
+	{"Banho", 35.00},
+	{"Tosa", 55.00},
+    {"Banho e Tosa Completo", 80.00},
+    {"Consulta Veterinária", 150.00},
+    {"Vacinação", 120.00},
+    {"Busca e Entrega", 0.0}
+};
+
 int main(){
 
     setlocale(LC_ALL, "Portuguese");
