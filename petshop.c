@@ -96,5 +96,7 @@ int main(){
     printf ("Informe opcao: ");
     scanf ("%d", &opca);
 
+    printf ("\no numero digitado foi: %d", opca);
+
     return 0;
 }
