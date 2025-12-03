@@ -89,20 +89,4 @@ struct Servico servicos[] = {
 
 int main(){
 
-    setlocale(LC_ALL, "Portuguese");
-
-    int opca;
-    int opca2;
-
-    printf ("Informe opcao: ");
-    scanf ("%d", &opca);
-
-    printf ("\no numero digitado foi: %d", opca);
-
-    printf ("Informe 2 numero: ");
-    scanf ("%d", &opca2);
-
-    printf ("\no 2 numero digitado foi: %d", opca2);
-
-    return 0;
 }
