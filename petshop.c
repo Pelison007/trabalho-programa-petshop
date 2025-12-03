@@ -1050,7 +1050,7 @@ void exibirExtratoCliente(struct Cadastro *cliente) {
 
 int main(){
 	
-	setlocale (LC_ALL, "Portuguese");
+	setlocale (LC_ALL, "");
 	
 	struct Cadastro *cliente =  NULL;
 	
