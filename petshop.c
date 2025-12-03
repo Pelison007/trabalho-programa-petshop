@@ -1049,5 +1049,289 @@ void exibirExtratoCliente(struct Cadastro *cliente) {
 }
 
 int main(){
+	
+	setlocale (LC_ALL, "Portuguese");
+	
+	struct Cadastro *cliente =  NULL;
+	
+	int total_cliente = 0;
+	int opcao, opcao2, opcao3, subop, j;
+	char cpf[15];
+	int total;
+	int cliente_encontrado;
+	int opcaoCarrinho;
 
+
+	/* ------------------------------------------------------------------------------------------ */
+		
+	desenho();
+	
+	do{
+		printf ("\n------------ MENU PRINCIPAL ------------\n");
+		
+		printf ("\n[1] = CADASTRAR NOVO CLIENTE\n");
+		printf ("[2] = LISTAR CLIENTES\n");
+		printf ("[3] = SELECIONAR CLIENTE POR CPF\n");
+		printf ("[ESC] = Sair\n");
+		printf ("\n----------------------------------------\n");
+		printf ("\nSelicione a opção: ");
+		opcao = obterOpcao();
+
+		
+		if (opcao < 1 || opcao > 4){
+			system ("cls");
+			printf ("\nOpcao inválida, Tente Novamente !\n");
+		}
+		
+		switch (opcao){
+			case 1:
+				system("cls");
+				printf ("------------------------------");
+				printf ("\nInforme o CPF: ");
+				scanf ("%s", cpf);
+		
+				if (validarCPF(cpf)) { /* chama função validar CPF */
+					system ("cls");
+	    	   		printf("\nCPF válido!\n");
+	    	   		
+		    		struct Cadastro *temp = realloc(cliente, (total_cliente + 1) * sizeof(struct Cadastro)); /* AUMENTA O TAMANHO DA STRUCT PARA +1 CADA VEZ Q SELECIONA CASE 1, ''CADASTRAR CLIENTE'', USANDO VARIAVEL TEMPORARIA TEMP PARA N PERDER REGISTROS */
+		    	   		if (temp == NULL){
+		    	   			printf ("Erro ao alocar memória!\n");
+		    	   			free(cliente);
+		    	   			return 1;
+						}
+						   
+					cliente = temp;
+		    	   		
+		    	   	strcpy(cliente[total_cliente].cpf_cliente, cpf); /* COPIA O CPF DIGITADO DPS DE VALIDADO E PASSA PARA O CPF DA STRUCT CLIENTE */
+		    	   		
+		    	   	printf ("\n***************************\n");
+		    	   	printf ("-> Nome do Cliente: ");
+		    	   	scanf(" %39[^\n]", cliente[total_cliente].nome_cliente);
+		    	   		
+		
+		    	 	printf ("-> Informe número de telefone: ");
+		    	   	scanf (" %17[^\n]", cliente[total_cliente].tel_cliente[0]);
+		    
+		    	   	printf ("-> Informe número reserva: ");
+		    	   	scanf (" %17[^\n]", cliente[total_cliente].tel_cliente[1]); 
+		    	   	
+		    	   	printf ("\n// Informe o Endereço //\n");
+		    	   	printf ("-> Nome da rua: ");
+		    	   	scanf (" %49[^\n]", cliente[total_cliente].endereco.rua);
+		    	   	
+		    	   	printf ("-> Numero da residencia: ");
+		    	   	scanf (" %19[^\n]", cliente[total_cliente].endereco.numero);
+		    	   	getchar();
+		    	   	
+		    	   	printf ("-> Cidade: ");
+		    	   	scanf (" %29[^\n]", cliente[total_cliente].endereco.cidade);
+		    	   	
+		    	   	
+					printf ("\n***************************\n");
+   		
+		    						    	   	
+		    	   	gravarClienteNoArquivo(&cliente[total_cliente]);
+						
+					system ("cls");
+		    	   	printf("\nCliente cadastrado e gravado automaticamente!\n");
+		    	   	total_cliente++;
+		    	  	
+		    	}
+				else {
+					system ("cls");
+		        	printf("CPF inválido!\n");
+		    	}
+		    break;
+	    		
+	    	case 2:
+	    		system("cls");
+		       	total = listarClientes();
+	       		printf ("\nTotal de Clientes: [%d]", total);
+	        	printf("\n*************************************************\n\n");
+	        	
+			    do{
+					printf ("\n // Precione [ESC] para voltar ao MENU PRINCIPAL //");
+					opcao3 = obterOpcao();
+	
+				
+					if (opcao3 != OPCAO_SAIR){
+						system ("cls");
+						printf ("\nOpcao inválida, Tente Novamente !\n");
+					}
+							
+					}while (opcao3 != OPCAO_SAIR);
+	        		system("cls");
+	        break;
+	        
+	        case 3:
+	    		system("cls");
+			    char cpf[15];
+			    printf("-> Qual o CPF do Cliente que deseja selecionar?\n");
+			    printf("-> CPF: ");
+			    scanf("%s", cpf);
+    			struct Cadastro clienteAtual;
+
+			    if (!buscarClientePorCPF(cpf, &clienteAtual)) { // &clienteAtual passa o endereço da variável para a função, permitindo que ela preencha os dados do cliente se encontrar. //
+			        break;
+			    }
+
+			    // Cliente encontrado -> entra direto no submenu
+			    printf("\n                     // CLIENTE SELECIONADO //                    \n");
+			    do {
+			        printf("\n------------------------- MENU DO CLIENTE -------------------------\n\n");
+			        printf("[1] = CONTRATAR SERVIÇO\n");
+			        printf("[2] = COMPRAR RAÇÕES\n");
+			        printf("[3] = COMPRAR BRINQUEDOS\n");
+			        printf("[4] = COMPRAR PRODUTO HIGIENICO\n");
+			        printf("[5] = COMPRAR ACESSORIOS\n");
+			        printf("[6] = VER CARRINHO\n");
+			        printf("[7] = INFORMAÇÕES DO CLIENTE\n");
+			        printf("[ESC] = VOLTAR\n");
+			        printf("\n-------------------------------------------------------------------\n");
+			        printf("\n-> Selecione a opção: ");
+			        opcao2 = obterOpcao();
+	
+			        if ((opcao2 < 1 || opcao2 > 7) && opcao2 != OPCAO_SAIR) {
+			            system("cls");
+			            printf("\nOpção inválida, tente novamente!\n");
+			            continue;
+			        }
+
+			        switch (opcao2) {
+			            case 1:
+			                system("cls");
+			                contratarServico(&clienteAtual.carrinho, servicos, totalServicos);
+			                break;
+			            case 2:
+			               system("cls");
+						    comprarRacao(&clienteAtual.carrinho);
+						    break;
+			            case 3:
+			                system("cls");
+			                comprarBrinquedo(&clienteAtual.carrinho);
+			                break;
+			            case 4:
+			                system("cls");
+			                comprarHigiene(&clienteAtual.carrinho);
+			                break;
+			            case 5:
+			                system("cls");
+			                comprarAcessorio(&clienteAtual.carrinho);
+			                break;
+			            case 6:
+							if (clienteAtual.carrinho.totalItens == 0) {
+							        system("cls");
+							        printf("\nO carrinho está vazio.\n");
+							        printf("\nPressione qualquer tecla para voltar...\n");
+							        getch();
+							        break;
+							}
+							system("cls");
+							do {
+							        float totalCarrinho = 0;
+							        printf("\n============================= CARRINHO =============================\n");
+							        printf("%-3s %-30s %-12s %-8s %-10s\n", "No", "Produto/Serviço", "Preço Unit.", "Qtd", "Subtotal");
+							        printf("--------------------------------------------------------------------\n");
+							        for (int i = 0; i < clienteAtual.carrinho.totalItens; i++) {
+							            struct ItemCarrinho item = clienteAtual.carrinho.itens[i];
+							            float subtotal = item.preco * item.quantidade;
+							            totalCarrinho += subtotal;
+							            printf("%-3d %-30s R$ %-10.2f %-8d R$ %-10.2f\n",
+							                   i + 1, item.nome, item.preco, item.quantidade, subtotal);
+							        }
+							        printf("--------------------------------------------------------------------\n");
+							        printf("[TOTAL GERAL: R$ %.2f]\n", totalCarrinho);
+							        printf("\n------------------------ OPÇÕES DO CARRINHO ------------------------\n");
+							        printf("[1] Ir para o pagamento\n");
+							        printf("[2] Remover item\n");
+							        printf("[ESC] Voltar\n");
+							        printf("--------------------------------------------------------------------\n");
+							        printf("\n-> Selecione a opção: ");
+							        opcaoCarrinho = obterOpcao();
+							
+									if ((opcaoCarrinho < 1 || opcaoCarrinho > 2) && opcaoCarrinho != OPCAO_SAIR) {
+							            system("cls");
+							            printf("\nOpção inválida, tente novamente!\n");
+							        }
+							
+							        switch(opcaoCarrinho) {
+							            case 1:
+							                system("cls");
+							                printf("\nRedirecionando para pagamento...\n");
+											realizarPagamento(&clienteAtual);
+							                break;
+							            case 2:
+							                removerItemCarrinho(&clienteAtual.carrinho);
+							                break;
+							            case OPCAO_SAIR:
+							                system("cls");
+							                break;
+							        }
+							system("cls");
+							} while(opcaoCarrinho != OPCAO_SAIR);
+							system("cls");
+							break;
+					    case 7:
+					    	mostrarInfoCliente(&clienteAtual);
+					    	do {
+							    printf("\n============= ALTERAR DADOS DO CLIENTE ============\n\n");
+							    printf("[1] Alterar telefone principal\n");
+							    printf("[2] Alterar telefone de reserva\n");
+							    printf("[3] Alterar endereço\n");
+							    printf("[4] Mostrar Compras ja feitas\n");
+							    printf("[ESC] Voltar\n");
+							    printf("-----------------------------------------------------\n");
+							    printf("-> Selecione: ");
+							    subop = obterOpcao();
+							    
+							    if ((subop < 1 || subop > 4) && subop != OPCAO_SAIR) {
+			         				system("cls");
+			            			printf("\nOpção inválida, tente novamente!\n");
+			            			continue;
+			       				}
+								printf ("\n");
+							    switch(subop) {
+							        case 1:
+							            printf("\nNovo número para contato: ");
+							            scanf(" %17[^\n]", clienteAtual.tel_cliente[0]);
+							            atualizarClienteNoArquivo(&clienteAtual);
+							            break;
+							        case 2:
+							            printf("\nNovo número para contato reserva: ");
+							            scanf(" %17[^\n]", clienteAtual.tel_cliente[1]);
+							            atualizarClienteNoArquivo(&clienteAtual);
+							            break;
+							        case 3:
+							            printf("Nome da rua atualizada: ");
+							            scanf(" %49[^\n]", clienteAtual.endereco.rua);
+							            printf("Numero de residencia atualizada: ");
+							            scanf(" %19[^\n]", clienteAtual.endereco.numero);
+							            printf("Cidade atualizada: ");
+							            scanf(" %29[^\n]", clienteAtual.endereco.cidade);
+							            atualizarClienteNoArquivo(&clienteAtual);
+							            break;
+							        case 4:
+							        	system("cls");
+   										exibirExtratoCliente(&clienteAtual);
+   										break;
+							        case OPCAO_SAIR:
+							            break;
+							    }
+							} while(subop != OPCAO_SAIR);
+					    	
+			            	case OPCAO_SAIR:
+			                system("cls");
+			                break;
+			        }
+			
+			    } while (opcao2 != OPCAO_SAIR);
+	
+			}
+		
+	} while (opcao != OPCAO_SAIR);
+		system ("cls");
+		printf ("Finalizando Programa....");
+	
+	return 0;
 }
